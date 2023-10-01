@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>半透明侧栏</title>
+    <style>
+        body {
+            background-color: #f2f2f2; /* 亮色主题的背景色 */
+            color: #333; /* 亮色主题的文字颜色 */
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        #sidebar {
+            position: fixed;
+            top: 0;
+            left: -300px;
+            width: 300px;
+            height: 100vh;
+            background-color: rgba(255, 255, 255, 0.9); /* 半透明白色背景 */
+            transition: left 0.3s ease-in-out;
+            z-index: 9999;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+        }
+
+        #sidebar.active {
+            left: 0;
+        }
+
+        #sidebar .toggle-btn {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            cursor: pointer;
+            color: #333; /* 亮色主题的文字颜色 */
+            font-size: 24px;
+            transition: transform 0.3s ease-in-out;
+        }
+
+        #sidebar.active .toggle-btn {
+            transform: rotate(90deg);
+        }
+
+        #addons-search {
+            margin-top: 20px;
+            padding: 10px;
+            background-color: rgba(0, 0, 0, 0.1); /* 半透明黑色背景 */
+            border-radius: 4px;
+        }
+
+        #addons-search input[type="text"] {
+            width: 90%;
+            padding: 8px;
+            border: none;
+            background-color: transparent;
+            color: #333; /* 亮色主题的文字颜色 */
+            font-size: 16px;
+        }
+
+        #addons-search input[type="text"]::placeholder {
+            color: #777; /* 半透明灰色文字颜色 */
+        }
+
+        #addons-list {
+            margin-top: 10px;
+        }
+
+        #addons-list ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        #addons-list li {
+            margin-bottom: 5px;
+            cursor: pointer;
+            padding: 8px;
+            background-color: rgba(0, 0, 0, 0.1); /* 半透明黑色背景 */
+    border-radius: 4px;
+}
+    </style>
+</head>
+<body>
+        <div class="toggle-btn" onclick="toggleSidebar()">☰</div>
+    <div id="sidebar">
+        <div class="toggle-btn" onclick="toggleSidebar()">☰</div>
+        <div id="addons-search">
+            <input type="text" placeholder="搜索功能...">
+        </div>
+        <div id="addons-list">
+            <ul>
+                <!-- 这里使用 JavaScript 生成侧栏的选项 -->
+            </ul>
+        </div>
+    </div>
+
+    <div id="content">
+        <h2>欢迎使用 cptr toolkits</h2>
+        <p>点击侧栏选择你想用的功能</p>
+        <p>这里显示首页的内容</p>
+    </div>
+
+    <script>
+        // JavaScript 部分，用于处理侧栏的显示与隐藏，以及动态生成侧栏选项
+
+        // 示例数组，包含侧栏选项
+        var addons = ["选项1", "选项2", "选项3"];
+
+        function toggleSidebar() {
+            var sidebar = document.getElementById("sidebar");
+            sidebar.classList.toggle("active");
+        }
+
+        function showAddonContent(addon) {
+            // 这里可以根据选中的选项，更新主要显示区域的内容
+            var contentDiv = document.getElementById("content");
+            contentDiv.innerHTML = "<h2>" + addon + "</h2><p>这里显示 " + addon + " 的内容</p>";
+        }
+
+        // 生成侧栏选项
+        var addonsList = document.getElementById("addons-list").getElementsByTagName("ul")[0];
+        addons.forEach(function (addon) {
+            var listItem = document.createElement("li");
+            listItem.textContent = addon;
+            listItem.onclick = function () {
+                showAddonContent(addon);
+            };
+            addonsList.appendChild(listItem);
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>UWP 风格的半透明侧栏</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+    }
+
+    .container {
+      display: flex;
+      height: 100vh;
+    }
+
+    .sidebar {
+      width: 250px;
+      background-color: rgba(0, 0, 0, 0.8);
+      color: #fff;
+      padding: 20px;
+    }
+
+    .content {
+      flex: 1;
+      background-color: #f2f2f2;
+      padding: 20px;
+    }
+
+    .addons-list {
+      list-style: none;
+      padding: 0;
+    }
+
+    .addons-list-item {
+      cursor: pointer;
+      padding: 8px;
+    }
+
+    .addons-list-item:hover {
+      background-color: rgba(255, 255, 255, 0.2);
+    }
+
+    .search-input {
+      width: 100%;
+      margin-top: 10px;
+      padding: 5px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="sidebar">
+      <h1>欢迎使用 CPtr Toolkits</h1>
+      <p>点击侧栏选择你想用的功能</p>
+      <input type="text" class="search-input" placeholder="搜索功能">
+      <ul class="addons-list" id="addonsList"></ul>
+    </div>
+    <div class="content" id="contentArea">
+      <h1>欢迎使用 CPtr Toolkits</h1>
+      <p>点击侧栏选择你想用的功能</p>
+    </div>
+  </div>
+
+  <script>
+    const addons = ["首页", "功能1", "功能2", "功能3"]; // 假设addons是一个包含了多个选项的数组
+
+    const addonsList = document.getElementById("addonsList");
+    const contentArea = document.getElementById("contentArea");
+
+    // 生成侧栏列表项
+    function generateAddonsList() {
+      addonsList.innerHTML = "";
+      addons.forEach(addon => {
+        const li = document.createElement("li");
+        li.className = "addons-list-item";
+        li.textContent = addon;
+        li.addEventListener("click", () => {
+          handleAddonClick(addon);
+        });
+        addonsList.appendChild(li);
+      });
+    }
+
+    // 处理侧栏点击事件
+    function handleAddonClick(addon) {
+      contentArea.innerHTML = `<h1>${addon}</h1><p>这是${addon}的内容。</p>`;
+    }
+
+    // 初始化侧栏
+    generateAddonsList();
+  </script>
+</body>
+</html>

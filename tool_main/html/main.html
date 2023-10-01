@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>CPtr Toolkits</title>
+  <style>
+    /* 侧栏样式 */
+    #sidebar {
+      position: fixed;
+      left: 0;
+      top: 0;
+      width: 300px;
+      height: 100%;
+      background-color: #f8f8f8;
+      border-right: 1px solid #e0e0e0;
+      padding: 20px;
+      box-sizing: border-box;
+      overflow-y: auto;
+      z-index: 999;
+      font-family: Arial, sans-serif;
+    }
+
+    /* 侧栏标题样式 */
+    #sidebar h2 {
+      margin-bottom: 20px;
+      font-size: 18px;
+    }
+
+    /* 侧栏搜索框样式 */
+    #search-input {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 10px;
+      box-sizing: border-box;
+      border: 1px solid #e0e0e0;
+      border-radius: 5px;
+      font-size: 14px;
+    }
+
+    /* 侧栏列表项样式 */
+    #addons-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    #addons-list li {
+      margin-bottom: 10px;
+      cursor: pointer;
+      padding: 10px;
+      background-color: #fff;
+      border-radius: 5px;
+      transition: background-color 0.3s ease;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    #addons-list li:hover {
+      background-color: #f2f2f2;
+    }
+
+    /* 按钮样式 */
+    #menu-button {
+      position: fixed;
+      left: 10px;
+      top: 10px;
+      width: 30px;
+      height: 30px;
+      background-color: rgba(255, 255, 255, 0.5);
+      border-radius: 50%;
+      cursor: pointer;
+      z-index: 1000;
+    }
+
+    /* 主要内容样式 */
+    #content {
+      margin-left: 320px;
+      padding: 20px;
+    }
+
+  </style>
+</head>
+<body>
+  <!-- 菜单按钮 -->
+  <!--<div id="menu-button"></div>-->
+  
+  <!-- 侧栏 -->
+  <div id="sidebar">
+    <h2>Addons</h2>
+    <input type="text" id="search-input" placeholder="搜索">
+    <ul id="addons-list">
+      <!-- 这里将由JavaScript动态生成列表项 -->
+    </ul>
+  </div>
+  
+<div id="content">
+<iframe srcdoc='
+  <!-- 主要内容 -->
+  <div id="content">
+    <h1>欢迎使用 CPtr Toolkits</h1>
+    <p>点击启动你想要的功能</p>
+  </div>'
+  style="width: 100%; height: 300px; border: none;"
+></iframe>
+</div>
+
+  <script>
+    // 假设addons变量是一个包含*.addons文件名的数组
+    const addons = ["主页", "*.addons文件名1", "*.addons文件名2", "插件1", "插件2", "插件3"];
+
+    // 获取侧栏和菜单按钮的引用
+    const sidebar = document.getElementById('sidebar');
+    const menuButton = document.getElementById('menu-button');
+    const addonsList = document.getElementById('addons-list');
+    const searchInput = document.getElementById('search-input');
+
+    // 生成侧栏列表项
+    function generateAddonsList() {
+      addonsList.innerHTML = "";
+      const searchTerm = searchInput.value.toLowerCase();
+      addons.forEach(addon => {
+        if (addon.toLowerCase().includes(searchTerm)) {
+          const li = document.createElement('li');
+          li.textContent = addon;
+          li.addEventListener('click', () => {
+            // 在这里添加处理点击事件的逻辑，例如打开对应的*.addons功能
+            console.log(`点击了 ${addon}`);
+          });
+          addonsList.appendChild(li);
+        }
+      });
+    }
+
+    // 切换侧栏的显示状态
+    function toggleSidebar() {
+      sidebar.classList.toggle('hidden');
+    }
+
+
+
+    // 监听搜索框输入事件
+    searchInput.addEventListener('input', () => {
+      generateAddonsList();
+    });
+
+    // 初始生成列表
+    generateAddonsList();
+
+
+  </script>
+</body>
+</html>

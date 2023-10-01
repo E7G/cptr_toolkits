@@ -1,0 +1,7 @@
+{
+	"name": "apiadmin",
+	"version": "4.0.0",
+	"author": "zhaoxiang <zhaoxiang051405@gmail.com>",
+	"private": false,
+	"main": "main.js"
+}

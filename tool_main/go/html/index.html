@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Cptr Tools</title>
+  <style>
+    body, html {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      overflow: hidden;
+    }
+    #sidebar {
+      display: none;
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 200px;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.5);
+      color: #fff;
+      padding: 20px;
+    }
+    #main-content {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+    }
+    #show-sidebar-btn {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      color: #000;
+      font-size: 24px;
+      cursor: pointer;
+      z-index: 999;
+    }
+    #hide-sidebar-btn {
+      background-color: transparent;
+      border: none;
+      color: #fff;
+      font-size: 20px;
+      cursor: pointer;
+      margin-bottom: 10px;
+    }
+    #search {
+      width: 100%;
+      padding: 8px;
+      box-sizing: border-box;
+      margin-bottom: 10px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      font-size: 16px;
+    }
+    /* Updated styles for addons-list */
+    #addons-list {
+      max-height: 80%;
+      overflow-y: auto;
+      list-style: none;
+      padding: 0;
+    }
+ /* New rounded button style for addons-list items */
+    #addons-list li {
+      padding: 8px;
+      cursor: pointer;
+      transition: background-color 0.2s ease;
+      display: flex;
+      align-items: center;
+      font-size: 16px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      margin: 5px 0;
+    }/*
+    #addons-list li:first-child {
+      font-weight: bold;
+      margin-bottom: 15px;
+    }*/
+    #addons-list li:hover {
+      background-color: #e5e5e5;
+    }
+    #addons-list li span {
+      flex-grow: 1;
+    }
+
+    /* Customized scrollbar */
+    #addons-list::-webkit-scrollbar {
+      width: 10px;
+    }
+    #addons-list::-webkit-scrollbar-track {
+      background: #f1f1f1;
+    }
+    #addons-list::-webkit-scrollbar-thumb {
+      background: #ccc;
+      border-radius: 5px;
+    }
+
+  </style>
+</head>
+<body>
+  <div id="main-content" >
+    <iframe id="main-iframe" frameborder="0" width="100%" height="100%"></iframe>
+    <div id="show-sidebar-btn" onclick="toggleSidebar()">☰</div>
+  </div>
+  <div id="sidebar">
+    <button id="hide-sidebar-btn" onclick="toggleSidebar()">←</button>
+    <input type="text" id="search" placeholder="Search"  oninput="filterAddons()">
+    <ul id="addons-list"></ul>
+  </div>
+  <script>
+    var addons = []; // Replace this array with your actual addon names
+
+    const mainIframe = document.getElementById('main-iframe');
+    const sidebar = document.getElementById('sidebar');
+    const showSidebarBtn = document.getElementById('show-sidebar-btn');
+    const hideSidebarBtn = document.getElementById('hide-sidebar-btn');
+    const addonsList = document.getElementById('addons-list');
+
+    let sidebarVisible = false;
+
+    function toggleSidebar() {
+      sidebarVisible = !sidebarVisible;
+      sidebar.style.display = sidebarVisible ? 'block' : 'none';
+      showSidebarBtn.style.display = sidebarVisible ? 'none' : 'block';
+    }
+
+        // iframe 实现跳转功能
+        var IframeOnClick = {
+            resolution: 200,
+            iframes: [],
+            interval: null,
+            Iframe: function() {
+                this.element = arguments[0];
+                this.cb = arguments[1];
+                this.hasTracked = false;
+            },
+            track: function(element, cb) {
+                this.iframes.push(new this.Iframe(element, cb));
+                if (!this.interval) {
+                    var _this = this;
+                    this.interval = setInterval(function() {
+                        _this.checkClick();
+                    }, this.resolution);
+                }
+            },
+            checkClick: function() {
+                if (document.activeElement) {
+                    var activeElement = document.activeElement;
+                    for (var i in this.iframes) {
+                        if (activeElement === this.iframes[i].element) { // user is in this Iframe  
+                            if (this.iframes[i].hasTracked == false) {
+                                this.iframes[i].cb.apply(window, []);
+                                this.iframes[i].hasTracked = true;
+                            }
+                        } else {
+                            this.iframes[i].hasTracked = false;
+                        }
+                    }
+                }
+            }
+        }
+IframeOnClick.track(mainIframe, function() {
+      if (sidebarVisible) {
+        toggleSidebar();
+      }
+        });
+
+/*
+    // Wait for the iframe to load
+    mainIframe.onload = function() {
+      // Create a script element
+      const script = document.createElement('script');
+          // Function code for runcmd
+    const runcmdCode = `
+      function runcmd(command) {
+  const url = "/runcmd?n=${currentAddon}"; // Replace with the URL of your Go server endpoint
+
+  // Create a payload object to send with the POST request
+  const payload = {
+    command: command,
+    client:"cptr_toolkits"
+  };
+
+  // Send a POST request to the server with the command and currentDir as data
+  fetch(url, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(payload),
+  })
+  .then(response => response.json())
+  .then(result => {
+    // Handle the response from the server
+    console.log(result);
+    // You can do more with the result, like displaying it in the iframe or performing other actions.
+  })
+  .catch(error => {
+    console.error('Error:', error);
+  });
+}
+    `;
+
+      script.textContent = runcmdCode;
+
+      // Append the script element to the iframe's document
+      mainIframe.contentDocument.body.appendChild(script);
+    };
+*/
+// 声明一个全局变量，用于存储当前加载的Addon名称
+let currentAddon = '';
+
+function loadAddon(addonName) {
+  // 使用try...catch来捕捉加载错误
+  try {
+    // 如果当前有已加载的Addon，则向服务器发送unload请求
+    if (currentAddon !== '' && currentAddon !== addonName) {
+      unloadAddon(currentAddon);
+    }
+    // 加载新的Addon
+    mainIframe.src = `/getaddons?n=${addonName}`;
+    // 更新当前Addon的名称
+    currentAddon = addonName;
+  } catch (error) {
+    // 加载错误的处理逻辑
+    console.error(`加载Addon ${addonName} 出现错误：`, error);
+    alert('加载Addon时发生错误，请稍后再试。');
+  }
+}
+
+function unloadAddon(addonName) {
+  // 向服务器发送unload请求，由Go服务器来处理unloading的逻辑
+  fetch(`/unloadaddon?n=${addonName}`)
+    .then(response => {
+      if (!response.ok) {
+        console.error('Unload请求失败:', response);
+      }
+    })
+    .catch(error => {
+      console.error('Unload请求错误:', error);
+    });
+}
+
+
+    function generateAddonList() {
+      renderAddonList(addons);
+    }
+
+    function filterAddons() {
+      const searchQuery = document.getElementById('search').value.toLowerCase();
+      const filteredAddons = addons.filter(addon => addon.toLowerCase().includes(searchQuery));
+      renderAddonList(filteredAddons);
+    }
+
+    function renderAddonList(addonsToRender) {
+      addonsList.innerHTML = ''; // Clear previous list
+      /*
+      const firstItem = document.createElement('li');
+      firstItem.innerText = '首页';
+      firstItem.addEventListener('click', () => loadAddon("homepage"));
+      addonsList.appendChild(firstItem);
+      */
+      addonsToRender.forEach(addonName => {
+        const item = document.createElement('li');
+        item.innerText = addonName;
+        item.addEventListener('click', () => loadAddon(addonName));
+        addonsList.appendChild(item);
+      });
+    }
+
+
+function LoadDefaultAddons() {
+  const homeIndex = addons.indexOf("首页");
+
+  if (homeIndex !== -1) {
+    // Move "首页" item to the first position in the addons array
+    addons.splice(homeIndex, 1);
+    addons.unshift("首页");
+  }
+
+  if (addons.length >= 1) {
+    loadAddon(addons[0]);
+  } else {
+    console.log("Addon数量不足，无需加载。");
+  }
+}
+
+
+  fetch('/getaddonslist')
+    .then(response => response.json())
+    .then(data => {
+      addons = data.addons;
+      console.log("Addons列表：", addons);
+      // 在这里可以对addons数组进行后续处理，比如显示在页面上
+      // 调用检查并加载Addon函数
+      LoadDefaultAddons();
+      generateAddonList();
+    })
+    .catch(error => console.error("获取Addons列表失败：", error));
+
+  </script>
+</body>
+</html>

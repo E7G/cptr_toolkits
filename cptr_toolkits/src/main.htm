@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>My Toolbox</title>
+    <style>
+      body {
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  margin: 0;
+}
+
+.sidebar {
+  background-color: #0078d7;
+  color: #fff;
+  height: 100%;
+  position: fixed;
+  width: 200px;
+}
+
+.sidebar ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
+.sidebar li {
+  cursor: pointer;
+  font-size: 18px;
+  padding: 15px;
+  transition: background-color 0.3s ease;
+}
+
+.sidebar li:hover {
+  background-color: #005a9e;
+}
+
+.content {
+  margin-left: 200px;
+  padding: 30px;
+}
+    </style>
+</head>
+<body>
+    <div class="sidebar">
+        <ul>
+            <li id="addon_homepage">Home</li>
+            <li id="addon_addon1">Addon1</li>
+            <li id="addon_addon2">Addon2</li>
+            <li id="addon_addon3">Addon3</li>
+        </ul>
+    </div>
+    <div class="content">
+        <h1>Welcome to My Toolbox.</h1>
+        <p>Click the sidebar to select the feature you want to use.</p>
+    </div>
+</body>
+</html>

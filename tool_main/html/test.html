@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Library-based HTML Page</title>
+  <style>
+    body, html {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      overflow: hidden;
+    }
+    #sidebar {
+      display: none;
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 200px;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.5);
+      color: #fff;
+      padding: 20px;
+    }
+    #main-content {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+    }
+    #show-sidebar-btn {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      color: #fff;
+      font-size: 24px;
+      cursor: pointer;
+      z-index: 999;
+    }
+    #hide-sidebar-btn {
+      background-color: transparent;
+      border: none;
+      color: #fff;
+      font-size: 20px;
+      cursor: pointer;
+      margin-bottom: 10px;
+    }
+    #search {
+      width: 100%;
+      padding: 8px;
+      box-sizing: border-box;
+      margin-bottom: 10px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      font-size: 16px;
+    }
+    /* Updated styles for addons-list */
+    #addons-list {
+      max-height: 80%;
+      overflow-y: auto;
+      list-style: none;
+      padding: 0;
+    }
+ /* New rounded button style for addons-list items */
+    #addons-list li {
+      padding: 8px;
+      cursor: pointer;
+      transition: background-color 0.2s ease;
+      display: flex;
+      align-items: center;
+      font-size: 16px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      margin: 5px 0;
+    }/*
+    #addons-list li:first-child {
+      font-weight: bold;
+      margin-bottom: 15px;
+    }*/
+    #addons-list li:hover {
+      background-color: #e5e5e5;
+    }
+    #addons-list li span {
+      flex-grow: 1;
+    }
+
+    /* Customized scrollbar */
+    #addons-list::-webkit-scrollbar {
+      width: 10px;
+    }
+    #addons-list::-webkit-scrollbar-track {
+      background: #f1f1f1;
+    }
+    #addons-list::-webkit-scrollbar-thumb {
+      background: #ccc;
+      border-radius: 5px;
+    }
+
+  </style>
+</head>
+<body>
+  <div id="main-content">
+    <iframe id="main-iframe" src="homepage.html" frameborder="0" width="100%" height="100%"></iframe>
+    <div id="show-sidebar-btn" onclick="toggleSidebar()">☰</div>
+  </div>
+  <div id="sidebar">
+    <button id="hide-sidebar-btn" onclick="toggleSidebar()">←</button>
+    <input type="text" id="search" placeholder="Search"  oninput="filterAddons()">
+    <ul id="addons-list"></ul>
+  </div>
+  <script>
+    var addons = ["homepage", "addon1", "addon2", "addon3", "addon1", "addon2", "addon3", "addon1", "addon2", "addon3", "addon1", "addon2", "addon3", "addon1", "addon2"]; // Replace this array with your actual addon names
+
+    const mainIframe = document.getElementById('main-iframe');
+    const sidebar = document.getElementById('sidebar');
+    const showSidebarBtn = document.getElementById('show-sidebar-btn');
+    const hideSidebarBtn = document.getElementById('hide-sidebar-btn');
+    const addonsList = document.getElementById('addons-list');
+
+    let sidebarVisible = false;
+
+    function toggleSidebar() {
+      sidebarVisible = !sidebarVisible;
+      sidebar.style.display = sidebarVisible ? 'block' : 'none';
+      showSidebarBtn.style.display = sidebarVisible ? 'none' : 'block';
+    }
+
+    function loadAddon(addonName) {
+      mainIframe.src = `${addonName}.html`;
+    }
+
+    function generateAddonList() {
+      renderAddonList(addons);
+    }
+
+    function filterAddons() {
+      const searchQuery = document.getElementById('search').value.toLowerCase();
+      const filteredAddons = addons.filter(addon => addon.toLowerCase().includes(searchQuery));
+      renderAddonList(filteredAddons);
+    }
+
+    function renderAddonList(addonsToRender) {
+      addonsList.innerHTML = ''; // Clear previous list
+      /*
+      const firstItem = document.createElement('li');
+      firstItem.innerText = '首页';
+      firstItem.addEventListener('click', () => loadAddon("homepage"));
+      addonsList.appendChild(firstItem);
+      */
+      addonsToRender.forEach(addonName => {
+        const item = document.createElement('li');
+        item.innerText = addonName;
+        item.addEventListener('click', () => loadAddon(addonName));
+        addonsList.appendChild(item);
+      });
+    }
+
+    generateAddonList();
+  </script>
+</body>
+</html>

@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>CPTR Toolkits</title>
+  <style>
+    /* Global styles */
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+    }
+    
+    /* Sidebar styles */
+    .sidebar {
+      position: fixed;
+      top: 0;
+      left: -300px; /* Hide the sidebar initially */
+      width: 300px;
+      height: 100vh;
+      background-color: rgba(0, 0, 0, 0.8);
+      color: #fff;
+      transition: left 0.3s;
+      overflow-y: auto;
+    }
+    
+    .sidebar.show {
+      left: 0; /* Show the sidebar */
+    }
+    
+    .sidebar h1 {
+      font-size: 20px;
+      padding: 20px;
+      margin: 0;
+    }
+    
+    .sidebar ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    
+    .sidebar li {
+      padding: 15px 20px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+    
+    .sidebar li:hover {
+      background-color: rgba(255, 255, 255, 0.1);
+    }
+    
+    .sidebar .close-btn {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      cursor: pointer;
+    }
+    
+    /* Main content styles */
+    .content {
+      padding: 20px;
+      margin-left: 300px;
+      transition: margin-left 0.3s;
+    }
+    
+    .content.hide-sidebar {
+      margin-left: 0; /* Shift main content to the left when the sidebar is hidden */
+    }
+  </style>
+</head>
+<body>
+  <div class="sidebar" id="sidebar">
+    <h1>CPTR Toolkits</h1>
+    <ul>
+      <!-- You can use JavaScript to dynamically populate the sidebar items from the "addons" array -->
+      <li>首页</li>
+      <li>Addon 1</li>
+      <li>Addon 2</li>
+      <!-- Add more items based on your "addons" array -->
+    </ul>
+    <div class="close-btn" onclick="toggleSidebar()">X</div>
+  </div>
+  
+  <div class="content" id="content">
+    <h1>欢迎使用CPTR Toolkits</h1>
+    <p>点击侧栏选择你想用的功能</p>
+  </div>
+  
+  <script>
+    // JavaScript to handle sidebar toggling
+    function toggleSidebar() {
+      const sidebar = document.getElementById('sidebar');
+      sidebar.classList.toggle('show');
+      
+      const content = document.getElementById('content');
+      content.classList.toggle('hide-sidebar');
+    }
+  </script>
+</body>
+</html>
